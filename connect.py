@@ -32,7 +32,15 @@ class Connect:
         return None
     
     def queue_message(self, text, channel):
-        self.send_queue.append((text, channel))
+        if text is None:
+            return
+
+        text = str(text)
+        max_len = 255
+
+        for i in range(0, len(text), max_len):
+            chunk = text[i : i + max_len]
+            self.send_queue.append((chunk, channel))
 
     def tick_send_queue(self):
         if self.send_queue:
@@ -40,7 +48,7 @@ class Connect:
             if current_time - self.prev_send_timestamp >= self.rate_limit:
                 text, channel = self.send_queue.pop(0)
                 try:
-                    self.interface.sendText(text, channel=channel)
+                    self.interface.sendText(text, channelIndex=channel)
                     print(f"Sent message: {text} to channel: {channel}")
                 except Exception as e:
                     print(f"Failed to send message: {e}")

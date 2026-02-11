@@ -4,6 +4,7 @@ from connect import Connect
 import time
 
 from parser import Parser
+from admin import AdminInterface
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Meshbot")
@@ -20,13 +21,14 @@ def main() -> None:
     print(f"IP: {args.ip}")
     c = Connect(str(args.ip))
     p = Parser()
+    a = AdminInterface(c)
     seq = 0
     while True:
         # Get next packet from the receive queue and parse it
         packet = c.pop_next_packet()
         if packet:
-            p.parse(packet)
-
+            parsed_packet = p.parse(packet)
+            a.process_packet(parsed_packet)
         # Tick the send queue to send any pending messages
         c.tick_send_queue()
 

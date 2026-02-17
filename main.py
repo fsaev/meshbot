@@ -7,7 +7,7 @@ from parser import Parser
 from admin import AdminInterface
 from messager import MessagerInterface
 
-version = "0.1.0"
+version = "0.1.1"
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Meshbot")

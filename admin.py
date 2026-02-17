@@ -1,3 +1,7 @@
+import sys
+import os
+import subprocess
+
 class AdminInterface:
     def __init__(self, connect):
         self.connect = connect
@@ -16,4 +20,8 @@ class AdminInterface:
         if type == 'cfg':
             if data == 'help':
                 self.reply_help()
+            elif data == 'upgrade':
+                source_dir = os.path.dirname(os.path.abspath(__file__))
+                subprocess.run(['git', 'pull'], cwd=source_dir)
+                os.execv(sys.executable, [sys.executable] + sys.argv)
             
